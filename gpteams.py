@@ -83,12 +83,10 @@ class gpteam():
 
 
     def clean_worker_output(self):
-        #go through each writen file and clean it up
         final = []
         for file in os.listdir(self.worker_dir):
             with open(f"{self.worker_dir}/{file}", "r") as f:
                 response = f.read()
-                # print(response)
                 code_pattern = r"`(.*?)`"
                 matches = re.findall(code_pattern, response, re.DOTALL)
                 python_code = matches[1].strip() if matches else None
@@ -99,7 +97,6 @@ class gpteam():
 
     def merge_workers(self):
         my_results = self.clean_worker_output()
-
         candidates = "\n\n\n".join(my_results)
         with open(f"{self.worker_dir}/master.py", "w") as f:
             f.write(self.master_answer(candidates))
