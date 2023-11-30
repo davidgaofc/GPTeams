@@ -42,7 +42,9 @@ class gpteam():
         splitable = []
         primary = []
         for i in sections:
-            if("TODO" in i):
+            if("import" in i):
+                pass
+            elif("TODO" in i):
                 primary.append(i+"\n\n")
             else:
                 splitable.append(i+"\n\n")
