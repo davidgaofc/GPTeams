@@ -1,10 +1,13 @@
-# import openai
+from openai import OpenAI
 import math
 import os
 import re
 import sys
-# openai.api_key = "YOUR_API_KEY"
 
+client = OpenAI(
+    # defaults to os.environ.get("OPENAI_API_KEY")
+    api_key="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",
+)
 
 class gpteam():
     def __init__(self, number_of_workers, work_dir, question_file):
@@ -14,26 +17,28 @@ class gpteam():
 
     def master_answer(self, prompt):
         pretext = "Take the following solutions to a function, and combine them into one function, taking the best parts of each. You may ignore solutions if they are incorrect."
-        # completion = openai.ChatCompletion.create(
-        #     model="gpt-3.5-turbo",
-        #     messages=[
-        #         {"role": "user", "content": pretext + "\n\n" + prompt}
-        #     ]
-        # )
-        # return completion.choices[0].message.content
-        return "master answer\n" + prompt
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": pretext + "\n\n" + prompt}
+            ]
+        )
+        print("master answered")
+        return completion.choices[0].message.content
+        # return "master answer\n" + prompt
 
     def worker_answer(self, prompt):
-        pretext = "Complete the function marked with TODO in the following code"
-        # completion = openai.ChatCompletion.create(
-        #     model="gpt-3.5-turbo",
-        #     messages=[
-        #         {"role": "user", "content": pretext + "\n\n" + prompt}
-        #     ]
-        # )
-        # return completion.choices[0].message.content
-        prompt = "here is my solution"
-        return "formatting junk" + "\n```python\n"+ prompt + "\n```\n" + "formatting junk"
+        pretext = "Complete the function marked with TODO in the following code. Be sure to capture your solution in a code block (```python ... ```)"
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": pretext + "\n\n" + prompt}
+            ]
+        )
+        print("worker answered")
+        return completion.choices[0].message.content
+        # prompt = "here is my solution"
+        # return "formatting junk" + "\n```python\n"+ prompt + "\n```\n" + "formatting junk"
 
     def parse_file(self, file):
         with open(file, "r") as f:

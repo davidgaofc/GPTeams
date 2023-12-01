@@ -1,5 +1,6 @@
 from gpteams import gpteam
 import os
+import time
 
 
 for question in os.listdir("questions"):
