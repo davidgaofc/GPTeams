@@ -1,55 +1,50 @@
-class Account:
-    def __init__(self, owner, balance=0):
-        self.owner = owner
-        self.balance = balance
+from collections import deque
 
-    def deposit(self, amount):
-        self.balance += amount
-        return self.balance
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.children = []
 
-    def withdraw(self, amount):
-        if self.balance >= amount:
-            self.balance -= amount
-            return self.balance
-        else:
-            return 'Insufficient funds'
+    def add_child(self, child_node):
+        self.children.append(child_node)
 
-class Transaction:
-    def __init__(self, sender, receiver, amount):
-        self.sender = sender
-        self.receiver = receiver
-        self.amount = amount
+class Tree:
+    def __init__(self, root_value):
+        self.root = TreeNode(root_value)
 
-    def execute_transaction(self):
-        if self.sender.balance >= self.amount:
-            self.sender.withdraw(self.amount)
-            self.receiver.deposit(self.amount)
-            return True
-        else:
-            return False
+    def add_node(self, parent_value, child_value):
+        parent_node = self.find_node(self.root, parent_value)
+        if parent_node is not None:
+            parent_node.add_child(TreeNode(child_value))
 
-def create_account(name, initial_deposit):
-    return Account(name, initial_deposit)
+    def find_node(self, node, value):
+        if node.value == value:
+            return node
+        for child in node.children:
+            found = self.find_node(child, value)
+            if found:
+                return found
+        return None
 
-def transfer_funds(sender, receiver, amount):
-    transaction = Transaction(sender, receiver, amount)
-    return transaction.execute_transaction()
+    def traverse_bfs(self):
+        visited = []
+        queue = deque([self.root])
+        while queue:
+            current_node = queue.popleft()
+            visited.append(current_node.value)
+            queue.extend(current_node.children)
+        return visited
 
-def check_balance(account):
-    return account.balance
+def create_tree(root_value):
+    return Tree(root_value)
 
-def update_owner(account, new_owner):
-    account.owner = new_owner
-    return account.owner
+def add_node_to_tree(tree, parent_value, child_value):
+    tree.add_node(parent_value, child_value)
 
-def log_transaction(transaction, log_file='transaction_log.txt'):
-    with open(log_file, 'a') as file:
-        file.write(f'Transaction: {transaction.sender.owner} to {transaction.receiver.owner}, Amount: {transaction.amount}\\n')
-
-# TODO: Implement the 'freeze_account' function
-def freeze_account(account):
-    # This function should take an Account object as input and change its status to frozen, preventing any withdrawals or deposits.
-    # It should return True if the account was successfully frozen, or False if the account was already frozen.
-    # Expected Input: account (Account object)
-    # Expected Output: True (if successfully frozen) or False (if already frozen)
+# TODO: Implement 'find_lowest_common_ancestor'
+def find_lowest_common_ancestor(tree, value1, value2):
+    # This function should take a Tree object and two node values, and find the lowest common ancestor (LCA) of these nodes.
+    # The LCA is the lowest node in the tree that has both nodes as descendants (where we allow a node to be a descendant of itself).
+    # Expected Input: tree (Tree object), value1 (node value), value2 (node value)
+    # Expected Output: lca_value (value of the lowest common ancestor node)
     pass

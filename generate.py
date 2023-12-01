@@ -8,7 +8,7 @@ for question in os.listdir("questions"):
     # print(str(question)[9])
     # if(int(str(question)[8]) != 1 and str(question)[9] != "."):
     #     continue
-    if(question != "question1.py"):
+    if(question != "question4.py"):
         continue
     print("starting", question)
     my_question = question.split(".")[0]
