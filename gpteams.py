@@ -103,6 +103,6 @@ class gpteam():
         with open(f"{self.worker_dir}/master.py", "w") as f:
             f.write(self.master_answer(candidates))
 
-    question_file = "questions/question1.py"
+    question_file = "questions/question_test.py"
     worker_dir = "output/question1"
     worker_count = 0
