@@ -1,17 +1,17 @@
 ```python
-from sympy import symbols, Eq, solve
+import numpy as np
 
 def find_polynomial_roots(polynomial):
-    # Convert the polynomial coefficients into symbolic expression
-    x = symbols('x')
-    polynomial_expr = sum(coeff * (x**i) for i, coeff in enumerate(polynomial.coefficients))
+    # Convert the polynomial coefficients to a numpy array
+    coeffs = np.array(polynomial.coefficients[::-1])  # Reverse the order of the coefficients
 
-    # Solve the equation for x to find the roots
-    roots = solve(Eq(polynomial_expr, 0), x)
-    # Convert the roots into ComplexNumber objects
-    complex_roots = [ComplexNumber(float(root.real), float(root.imag)) for root in roots]
+    # Use numpy's polyroots function to find the roots
+    roots = np.roots(coeffs)
 
-    return complex_roots
+    # Convert the roots to ComplexNumber objects
+    root_objects = [ComplexNumber(root.real, root.imag) for root in roots]
+
+    return root_objects
 ```
 
-The `find_polynomial_roots` function uses the sympy library to solve the polynomial equation for `x` and find the roots. It converts the roots into `ComplexNumber` objects and returns a list of these objects representing the roots of the polynomial.
+The `find_polynomial_roots` function uses the numpy library's `roots` function to find the roots of the polynomial. The input polynomial's coefficients are converted to a numpy array, and the `roots` function is applied to find the roots. The resulting roots are then converted to `ComplexNumber` objects and returned as a list.

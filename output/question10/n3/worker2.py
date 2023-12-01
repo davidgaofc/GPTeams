@@ -1,37 +1,39 @@
-```python
-import numpy as np
+```python 
+from sympy import symbols, Eq, solve
 
 def create_complex_number(real, imaginary):
+    # creating ComplexNumber object
     return ComplexNumber(real, imaginary)
 
 class Polynomial:
     def __init__(self, coefficients):
-        self.coefficients = coefficients  # coefficients are stored from the lowest degree to the highest
+        # coefficients are stored from the lowest degree to the highest
+        self.coefficients = coefficients  
 
     def evaluate(self, x):
+        # evaluating the polynomial for given x
         return sum(coef * (x**i) for i, coef in enumerate(self.coefficients))
 
     def derivative(self):
+        # calculating derivative of the polynomial
         derived_coeffs = [i * coef for i, coef in enumerate(self.coefficients)][1:]
         return Polynomial(derived_coeffs)
 
     def __str__(self):
+        # creating a string representation of the polynomial
         return " + ".join(f"{coef}x^{i}" for i, coef in enumerate(self.coefficients) if coef)
 
 def create_polynomial(coefficients):
+    # creating Polynomial object
     return Polynomial(coefficients)
 
 def find_polynomial_roots(polynomial):
-    # Convert the coefficients of the polynomial into a numpy array
-    p = np.array(polynomial.coefficients)
+    # finding the roots of a polynomial using sympy
+    x = symbols('x')
+    equation = Eq(polynomial.evaluate(x), 0)
+    solutions = solve(equation, x)
 
-    # Use numpy's roots function to find the roots
-    roots = np.roots(p)
-
-    # Convert the roots into ComplexNumber objects
-    root_objects = [create_complex_number(root.real, root.imag) for root in roots]
-
-    return root_objects
+    # converting solutions to ComplexNumber objects
+    roots = [create_complex_number(float(sol.evalf()), 0) for sol in solutions]
+    return roots
 ```
-
-This implementation uses the `numpy` library's `roots` function to find the roots of the polynomial. The roots are then converted into `ComplexNumber` objects using the `create_complex_number` function. The roots are returned as a list of `ComplexNumber` objects.

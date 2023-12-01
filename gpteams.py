@@ -6,7 +6,7 @@ import sys
 
 client = OpenAI(
     # defaults to os.environ.get("OPENAI_API_KEY")
-    api_key="insert key here",
+    api_key="key",
 )
 
 class gpteam():
