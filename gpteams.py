@@ -6,7 +6,7 @@ import sys
 
 client = OpenAI(
     # defaults to os.environ.get("OPENAI_API_KEY")
-    api_key="",
+    api_key="insert key here",
 )
 
 class gpteam():
@@ -96,7 +96,10 @@ class gpteam():
                 response = f.read()
                 code_pattern = r"`(.*?)`"
                 matches = re.findall(code_pattern, response, re.DOTALL)
-                python_code = matches[1].strip() if matches else None
+                try:
+                    python_code = matches[1].strip() if matches else None
+                except:
+                    python_code = matches[0].strip() if matches else None
                 if(python_code):
                     cleaned = python_code.replace("python", "")
                     final.append(cleaned)

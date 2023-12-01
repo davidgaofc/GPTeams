@@ -1,0 +1,82 @@
+import random
+import math
+import matplotlib.pyplot as plt
+
+def create_points(num_points):
+    return [(random.uniform(0, 10), random.uniform(0, 10)) for _ in range(num_points)]
+
+def calculate_distances(points):
+    distances = {}
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            dist = math.sqrt((points[i][0] - points[j][0])**2 + (points[i][1] - points[j][1])**2)
+            distances[(i, j)] = dist
+    return distances
+
+def find_closest_points(points, distances):
+    closest_pair = min(distances, key=distances.get)
+    return points[closest_pair[0]], points[closest_pair[1]]
+
+def draw_points(points, hull=None):
+    plt.scatter(*zip(*points))
+    if hull:
+        for i in range(len(hull)):
+            plt.plot(*zip(*hull[i:i+2]), color='red')
+        plt.plot(*zip(*[hull[-1], hull[0]]), color='red')  # Closing the hull
+    plt.show()
+
+def calculate_centroid(points):
+    x_mean = sum(point[0] for point in points) / len(points)
+    y_mean = sum(point[1] for point in points) / len(points)
+    return x_mean, y_mean
+
+def sort_points_by_angle(points, centroid):
+    def angle_from_centroid(point):
+        return math.atan2(point[1] - centroid[1], point[0] - centroid[0])
+    return sorted(points, key=angle_from_centroid)
+
+def calculate_convex_hull(points):
+    """
+        Calculates the convex hull of a given set of 2D points.
+        Input:
+            points: List of tuples [(x1, y1), (x2, y2), ..., (xn, yn)].
+        Output:
+            List of tuples representing the vertices of the convex hull, ordered along its perimeter.
+    """
+    # Sort points by x-coordinate
+    sorted_points = sorted(points, key=lambda x: x[0])
+
+    # Define helper functions
+
+    def orientation(p, q, r):
+        """
+        Returns the orientation of three points (p, q, r).
+        :return:
+            0 if p, q, r are collinear,
+            1 if clockwise,
+            2 if counterclockwise.
+        """
+        val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
+        if val == 0:
+            return 0  # Collinear
+        elif val > 0:
+            return 1  # Clockwise
+        else:
+            return 2  # Counterclockwise
+
+    # Initialize an empty stack
+    stack = []
+
+    # Add first three points to the stack
+    stack.append(sorted_points[0])
+    stack.append(sorted_points[1])
+    stack.append(sorted_points[2])
+
+    # Process remaining points
+    for i in range(3, len(sorted_points)):
+        while len(stack) > 1 and orientation(stack[-2], stack[-1], sorted_points[i]) != 2:
+            stack.pop()
+
+        stack.append(sorted_points[i])
+
+    return stack
