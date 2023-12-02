@@ -1,0 +1,4 @@
+Results for solution 3:
+Functional Test Results: 2
+Cyclomatic Complexity: 7
+Performance Test Results: 101.24280593329999

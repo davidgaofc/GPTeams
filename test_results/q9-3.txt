@@ -1,0 +1,4 @@
+Results for solution 3:
+Functional Test Results: 0
+Cyclomatic Complexity: 4
+Performance Test Results: None
