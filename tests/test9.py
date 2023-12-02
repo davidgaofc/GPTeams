@@ -82,11 +82,11 @@ def test_performance(loading_func):
     times = []
     for warehouse_setup, vehicle_capacity, _ in test_cases:
         try:
-            warehouse = Warehouse()
+            warehouse = n1.Warehouse()
             for product, quantity in warehouse_setup:
-                warehouse.add_product(Product(product[0], product[1]), quantity)
+                warehouse.add_product(n1.Product(product[0], product[1]), quantity)
 
-            vehicle = DeliveryVehicle(vehicle_capacity)
+            vehicle = n1.DeliveryVehicle(vehicle_capacity)
             time_taken = timeit.timeit(
                 lambda: loading_func(warehouse, vehicle), number=1000
             )
